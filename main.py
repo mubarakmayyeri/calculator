@@ -45,6 +45,7 @@ class Calculator:
         self.create_equals_button()
         self.create_square_button()
         self.create_sqrt_button()
+        self.bind_keys()
 
     def create_display_labels(self):
         total_label = tk.Label(self.display_frame, text=self.total_expression, anchor=tk.E, bg=LIGHT_GRAY,
@@ -56,6 +57,14 @@ class Calculator:
         label.pack(expand=True, fill="both")
 
         return total_label, label
+
+    def bind_keys(self):
+        self.window.bind("<Return>", lambda event: self.evaluate())
+        for key in self.digits:
+            self.window.bind(str(key), lambda event, digit=key: self.add_to_expressions(digit))
+
+        for key in self.operations:
+            self.window.bind(str(key), lambda event, operator=key: self.append_operator(operator))
 
     def create_display_frame(self):
         frame = tk.Frame(self.window, height=221, bg=LIGHT_GRAY)
