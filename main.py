@@ -3,6 +3,10 @@ import tkinter as tk
 SMALL_FONT_STYLE = ("Ariel", 16)
 LARGE_FONT_STYLE = ("Ariel", 40, "bold")
 DIGIT_FONT_STYLE = ("Ariel", 24, "bold")
+DEFAULT_FONT_STYLE = ("Ariel", 20)
+
+OFF_WHITE = "#F8F8FF"
+LIGHT_BLUE = "#CCEDFF"
 WHITE = "#FFFFFF"
 LIGHT_GRAY = "#F5F5F5"
 LABEL_COLOR = "#25265E"
@@ -27,8 +31,18 @@ class Calculator:
             1: (3, 1), 2: (3, 2), 3: (3, 3),
             '.': (4, 1), 0: (4, 2)
         }
+        self.operations = {"/": "\u00F7", "*": "\u00D7", "-": '-', "+": "+"}
         self.button_frame = self.create_button_frame()
+
+        self.button_frame.rowconfigure(0, weight=1)
+        for x in range(1,5):
+            self.button_frame.rowconfigure(x, weight=1)
+            self.button_frame.columnconfigure(x, weight=1)
+
+        self.create_operator_buttons()
         self.create_digit_buttons()
+        self.create_clear_button()
+        self.create_equals_button()
 
     def create_display_labels(self):
         total_label = tk.Label(self.display_frame, text=self.total_expression, anchor=tk.E, bg=LIGHT_GRAY,
@@ -47,9 +61,28 @@ class Calculator:
         return frame
 
     def create_digit_buttons(self):
-        for digit,grid_value in self.digits.items():
-            button = tk.Button(self.button_frame, text=str(digit), bg=WHITE, fg=LABEL_COLOR, font=DIGIT_FONT_STYLE, borderwidth=0)
+        for digit, grid_value in self.digits.items():
+            button = tk.Button(self.button_frame, text=str(digit), bg=WHITE, fg=LABEL_COLOR, font=DIGIT_FONT_STYLE,
+                               borderwidth=0)
             button.grid(row=grid_value[0], column=grid_value[1], sticky=tk.NSEW)
+
+    def create_operator_buttons(self):
+        i = 0
+        for operator, symbol in self.operations.items():
+            button = tk.Button(self.button_frame, text=symbol, bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
+                               borderwidth=0)
+            button.grid(row=i, column=4, sticky=tk.NSEW)
+            i += 1
+
+    def create_clear_button(self):
+        button = tk.Button(self.button_frame, text="C", bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
+                           borderwidth=0)
+        button.grid(row=0, column=1, columnspan=3, sticky=tk.NSEW)
+
+    def create_equals_button(self):
+        button = tk.Button(self.button_frame, text="=", bg=LIGHT_BLUE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
+                           borderwidth=0)
+        button.grid(row=4, column=3, columnspan=2, sticky=tk.NSEW)
 
     def create_button_frame(self):
         frame = tk.Frame(self.window)
