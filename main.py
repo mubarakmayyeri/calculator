@@ -108,8 +108,12 @@ class Calculator:
         button.grid(row=0, column=1, sticky=tk.NSEW)
 
     def square(self):
-        self.current_expression = str(eval(f"{self.current_expression}**2"))
-        self.update_label()
+        try:
+            self.current_expression = str(eval(f"{self.current_expression}**2"))
+        except OverflowError as e:
+            self.current_expression = "Error"
+        finally:
+            self.update_label()
 
     def create_square_button(self):
         button = tk.Button(self.button_frame, text="x\u00b2", bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
